@@ -2,10 +2,5 @@
   "welcome": "Welcome to the {{target}} extension!",
   "iWouldLikeAFreeGiftWithMyOrder": "I would like to receive a free gift with my order",
   "addAFreeGiftToMyOrder": "Add a free gift to my order",
-  "attributeChangesAreNotSupported": "Attribute changes are not supported in this checkout",
-  "consent.default": "clickHere for an overview of how your personal data is processed for marketing purposes or see our privacyPolicy for further information.",
-  "consent.gb": "We would like to email you news, special offers and other promotional material that may be of interest to you. Tick the box to opt out.",
-  "consent.de": "We would like to email you news, special offers and other promotional material that may be of interest to you. Tick the box to opt in.",
-  "consent.ca.en": "We would like to email you news, special offers and other promotional material that may be of interest to you. Tick the box to opt out.",
-  "consent.ca.fr": "Nous aimerions vous envoyer des nouvelles, des offres spéciales et d'autres éléments promotionnels susceptibles de vous intéresser. Cochez la case pour vous désabonner."
+  "attributeChangesAreNotSupported": "Attribute changes are not supported in this checkout"
 }
