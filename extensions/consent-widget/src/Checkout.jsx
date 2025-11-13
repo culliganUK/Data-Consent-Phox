@@ -136,7 +136,7 @@ function App() {
   // Unchecked = subscribed after order (soft opt-in) unless they tick to opt out
   const [optStatus, setOptStatus] = useState(false);
 
-  const API_BASE = 'https://data-consent-production-6bb1.up.railway.app';
+  const API_BASE = 'https://data-consent-phox-production.up.railway.app';
 
   async function callServer() {
     const token = await sessionToken.get();

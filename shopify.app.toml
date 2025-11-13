@@ -2,7 +2,7 @@
 
 client_id = "b94853d0c628ef9fec8ac655388c657a"
 name = "Phox Data Consent"
-application_url = "https://data-consent-production-6bb1.up.railway.app"
+application_url = "https://data-consent-phox-production.up.railway.app"
 embedded = true
 
 [build]
