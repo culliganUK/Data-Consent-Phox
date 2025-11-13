@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:UrysgOuxElcZtyYWyCuBRrInrOLfeWEr@hopper.proxy.rlwy.net:33871/railway"
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+}
+
+model AppSettings {
+  id             Int      @id @default(autoincrement())
+  shop           String   @unique
+  optInText      String?  @db.Text
+  optOutText     String?  @db.Text
+  noCheckboxText String?  @db.Text
+  marketingInfo  String?  @db.Text
+  privacyUrl     String   @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Customer {
+  id                          String           @id @default(uuid())
+  createdAt                   DateTime         @default(now())
+  updatedAt                   DateTime         @updatedAt
+  shop                        String
+  email                       String?
+  shopifyCustomerId           String
+  firstName                   String?
+  lastName                    String?
+  customerType                String?          @default("single")
+  lastState                   MarketingState?
+  lastConsentAt               DateTime?
+  lastMode                    ConsentMode?
+  lastCountry                 String?
+  events                      ConsentEvent[]
+  sessions                    ConsentSession[]
+  suppressConsentWebhookUntil DateTime?
+  suppressConsentState        MarketingState?
+  @@unique([shop, shopifyCustomerId], map: "Customer_shop_shopifyCustomerId_key")
+  @@unique([shop, email], map: "Customer_shop_email_key")
+}
+
+model ConsentSession {
+  id                   String         @id @default(uuid())
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  shop                 String
+  mode                 ConsentMode
+  country              String?
+  variant              String?
+  displayText          String?        @db.Text
+  privacyUrl           String?        @db.Text
+  marketingPreferences String?        @db.Text
+  ipCountry            String?
+  billingCountry       String?
+  orderId              String?        @unique
+  customerId           String?
+  subscribed           Boolean?
+  consentAt            DateTime?
+  checkoutToken        String?        @unique
+  events               ConsentEvent[]
+  customer             Customer?      @relation(fields: [customerId], references: [id])
+
+  @@index([shop, createdAt])
+  @@index([customerId], map: "ConsentSession_customerId_fkey")
+}
+
+model ConsentEvent {
+  id         String          @id @default(uuid())
+  createdAt  DateTime        @default(now())
+  sessionId  String?
+  customerId String?
+  type       String
+  state      MarketingState?
+  country    String?
+  note       String?
+  customer   Customer?       @relation(fields: [customerId], references: [id])
+  session    ConsentSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([customerId, createdAt])
+  @@index([sessionId, createdAt])
+  @@index([type, createdAt])
+}
+
+model KlaviyoSettings {
+  id                 Int      @id @default(autoincrement())
+  shop               String   @unique
+  encryptedKey       String
+  keySuffix          String?
+  singleOptListId    String?
+  singleOptListName  String?
+  doubleOptListId    String?
+  doubleOptListName  String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+enum ConsentMode {
+  OPT_OUT
+  OPT_IN
+  NO_CHECKBOX
+}
+
+enum MarketingState {
+  SUBSCRIBED
+  UNSUBSCRIBED
+  NOT_SUBSCRIBED
+}
